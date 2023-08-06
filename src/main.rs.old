@@ -1,0 +1,28 @@
+use mouse_rs::{types::keys::Keys, Mouse};
+use std::{thread, time};
+
+fn main() {
+
+    let (cx, cy) = (2881.0, 555.0); // 99.9
+    //let (cx, cy) = (2880.8, 555.0); // 99.9
+    //let (cx, cy) = (2880.5, 555.0); // 99.9
+    let r = 450.0;
+    let mouse = Mouse::new();
+    let dur = time::Duration::from_millis(5);
+
+    let theta = std::f32::consts::PI/180.0;
+    let x = (cx + r*theta.cos()) as i32;
+    let y = (cy + r*theta.sin()) as i32;
+    mouse.move_to(x, y).expect("yo");
+    mouse.press(&Keys::LEFT).expect("unable to press left button");
+    for i in 1..=360 {
+      let theta = (i as f32)*std::f32::consts::PI/180.0;
+      let x = (cx + r*theta.cos()) as i32;
+      let y = (cy + r*theta.sin()) as i32;
+      mouse.move_to(x, y).expect("yo");
+      println!("{x} {y}");
+      thread::sleep(dur);
+    
+    }
+    mouse.release(&Keys::LEFT).expect("unable to release left button");
+}
